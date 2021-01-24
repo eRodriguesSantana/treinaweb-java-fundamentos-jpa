@@ -6,6 +6,10 @@
 	<artifactId>treinaweb-jpa-fundamentos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>treinaweb-jpa-fundamentos</name>
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<!-- JPA -->
 		<dependency>
@@ -26,7 +30,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.22</version>
-		</dependency>
-		
+		</dependency>		
 	</dependencies>
 </project>

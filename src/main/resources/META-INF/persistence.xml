@@ -5,6 +5,11 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
 	<persistence-unit name="treinaweb-jpa-fundamentos">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		
+		<!-- Registro manual da classe a ser manipulada pelo JPA HIbernate -->
+		<!-- Recomendado fazer isso, independente do ORM a ser utilizado -->
+		<class>br.com.treinaweb.jpa.models.Pessoa</class>
+		
 		<properties>
 			<!-- JPA -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>

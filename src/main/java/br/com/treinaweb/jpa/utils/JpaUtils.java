@@ -16,6 +16,7 @@ public class JpaUtils {
 			ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("treinaweb-jpa-fundamentos");
 		}
 		
+		// Retorna uma criação de acesso ao Banco de Dados
 		return ENTITY_MANAGER_FACTORY.createEntityManager();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import br.com.treinaweb.jpa.models.Pessoa;
 import br.com.treinaweb.jpa.services.impl.PessoaService;
 import br.com.treinaweb.jpa.services.interfaces.CrudService;
+import br.com.treinaweb.jpa.services.interfaces.PessoaBuscaPorNome;
 
 public class Main {
 
@@ -42,12 +43,34 @@ public class Main {
 			case 4:
 				deletarPessoa();
 				break;
+			case 5:
+				pesquisarPessoaPorNome();
+				break;
 			default:
 				System.out.println("*** Opção inválida ***");
 				break;
 			}
 		}
 		System.out.println("Tchau :)");
+	}
+
+	private static void pesquisarPessoaPorNome() {
+		System.out.println("\nPesquisa de pessoa por nome");
+		System.out.print("Digite o nome da pessoa a ser pesquisa: ");
+		String nomeASerPesquisado = SCANNER.nextLine();
+		
+		PessoaBuscaPorNome pessoaService = new PessoaService();
+		/*pessoaService.searchByName(nomeASerPesquisado).forEach(pessoa -> {
+			System.out.println(String.format(" - (%d) %s %s - %d ano(s)", pessoa.getId(), pessoa.getNome(),
+					pessoa.getSobrenome(), pessoa.getIdade()));
+		});*/
+		
+		// ou
+		
+		pessoaService.searchByName2(nomeASerPesquisado).forEach(pessoa -> {
+			System.out.println(String.format(" - (%d) %s %s - %d ano(s)", pessoa.getId(), pessoa.getNome(),
+					pessoa.getSobrenome(), pessoa.getIdade()));
+		});
 	}
 
 	private static void deletarPessoa() {

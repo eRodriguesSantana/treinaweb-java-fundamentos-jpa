@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 
 import br.com.treinaweb.jpa.models.Pessoa;
-import br.com.treinaweb.jpa.services.interfaces.CrudService;
+import br.com.treinaweb.jpa.services.interfaces.PessoaBuscaPorNome;
 import br.com.treinaweb.jpa.utils.JpaUtils;
 
-public class PessoaService implements CrudService<Pessoa, Integer> {
+public class PessoaService implements PessoaBuscaPorNome {
 
 	@Override
 	public List<Pessoa> all() {
@@ -133,12 +136,65 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 		try {
 			em = JpaUtils.getEntityManager();
 			Pessoa pessoaASerDeletada = em.find(Pessoa.class, id);
-			
-			if(pessoaASerDeletada != null) {
+
+			if (pessoaASerDeletada != null) {
 				em.getTransaction().begin();
 				em.remove(pessoaASerDeletada);
 				em.getTransaction().commit();
 			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+	}
+
+	// Utiizando API JPQL -> exige maior digitação SQL
+	@Override
+	public List<Pessoa> searchByName(String name) {
+		EntityManager em = null;
+
+		try {
+			em = JpaUtils.getEntityManager();
+
+			// Passar o nome da classe na consulta SQL (escrever igual a forma como a classe
+			// foi escrita)
+			// O atributo a ser passado no WHERE é o mesmo declarado na classe Pessoa
+			// :nome -> parametro a ser passado na consulta SQL
+			List<Pessoa> pessoas = em
+					.createQuery("FROM Pessoa p WHERE lower(p.nome) LIKE lower(concat('%', :nome, '%'))", Pessoa.class)
+					.setParameter("nome", name).getResultList();
+			return pessoas;
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+	}
+
+	// Utiizando CRITERIA -> Instrução SQL escrita de forma mais declarativa
+	// Sem risco de errar a sintaxe na hora de escrever
+	@Override
+	public List<Pessoa> searchByName2(String name) {
+		EntityManager em = null;
+
+		try {
+			em = JpaUtils.getEntityManager();
+
+			// Construtor CRITERIA
+			CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+			// Representa a consulta a ser realizadae e a classe a ser manipulada
+			CriteriaQuery<Pessoa> buscaPorNomeCriteria = criteriaBuilder.createQuery(Pessoa.class);
+
+			// Raiz da consulta
+			Root<Pessoa> raiz = buscaPorNomeCriteria.from(Pessoa.class);
+			
+			buscaPorNomeCriteria.where(criteriaBuilder.like(criteriaBuilder.lower(raiz.get("nome")), "%" + name.toLowerCase() + "%"));
+
+			List<Pessoa> pessoas = em.createQuery(buscaPorNomeCriteria).getResultList();
+			
+			return pessoas;
 		} finally {
 			if (em != null) {
 				em.close();

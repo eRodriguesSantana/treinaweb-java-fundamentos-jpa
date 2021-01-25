@@ -36,6 +36,9 @@ public class Main {
 			case 2:
 				inserirPessoa();
 				break;
+			case 3:
+				atualizarPessoa();
+				break;
 			default:
 				System.out.println("*** Opção inválida ***");
 				break;
@@ -44,8 +47,38 @@ public class Main {
 		System.out.println("Tchau :)");
 	}
 
+	private static void atualizarPessoa() {
+		System.out.println("\nAtualização de pessoa");
+		System.out.print("Digite o ID da pessoa a ser atualizada: ");
+		int idPessoa = SCANNER.nextInt();
+		SCANNER.nextLine();
+		
+		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
+		Pessoa pessoaAtual = pessoaService.byId(idPessoa);
+		
+		if(pessoaAtual != null) {
+			System.out.println("Pessoa encontrada:");
+			System.out.println(pessoaAtual.toString());
+			System.err.print("\nNovo nome: ");
+			pessoaAtual.setNome(SCANNER.nextLine());
+			System.err.print("\nNovo sobrenome: ");
+			pessoaAtual.setSobrenome(SCANNER.nextLine());
+			System.err.print("\nNova idade: ");
+			pessoaAtual.setIdade(SCANNER.nextInt());
+			
+			// pessoaService.update(pessoaAtual);
+			// ou
+			pessoaService.update2(pessoaAtual);
+			
+			System.out.println("Atualização realizada com sucesso.");
+		} else {
+			System.out.println("Não existe pessoa com esse ID.");
+		}
+		
+	}
+
 	private static void inserirPessoa() {
-		System.out.println("Cadastro de pessoa");
+		System.out.println("\nCadastro de pessoa");
 
 		Pessoa novaPessoa = new Pessoa();
 		System.out.print("Nome: ");

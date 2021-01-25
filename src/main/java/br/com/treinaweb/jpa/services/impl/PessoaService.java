@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.hibernate.Session;
+
 import br.com.treinaweb.jpa.models.Pessoa;
 import br.com.treinaweb.jpa.services.interfaces.CrudService;
 import br.com.treinaweb.jpa.utils.JpaUtils;
@@ -59,11 +61,51 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 			}
 		}
 	}
-
+	
+	// Utilização métodos JPA
 	@Override
 	public Pessoa update(Pessoa entity) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = null;
+		
+		try {
+			em = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+			
+			// Pega os valores da proprieda da entidade buscada pelo ID (processo do JPA) e passa para uma entidade 
+			// anexada ao contexto da JPA
+			// Faz SELECET antes de fazer a atualização
+			em.merge(entity);
+			
+			em.getTransaction().commit();
+			return entity;
+		} finally {
+			if(em != null) {
+				em.close();
+			}
+		}
+	}
+	
+	// Utilização métodos Hibernate
+	@Override
+	public Pessoa update2(Pessoa entity) {
+		EntityManager em = null;
+		
+		try {
+			em = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+			
+			// Provê acesso direto a API do provider que está sendo usado
+			// Precisa informar a classe a ser manipulada
+			// Não faz SELECET antes de fazer a atualização
+			em.unwrap(Session.class).update(entity);
+			
+			em.getTransaction().commit();
+			return entity;
+		} finally {
+			if(em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override

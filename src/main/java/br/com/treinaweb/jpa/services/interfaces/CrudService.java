@@ -15,8 +15,11 @@ public interface CrudService<T, K> {
 	// Insert de registro
 	T insert(T entity);
 	
-	// Update de registro
+	// Update de registro - Uso de métodos JPA. Faz um SELECT antes de atualizar.
 	T update(T entity);
+	
+	// Update de registro - Uso de métodos HIbernate. Não faz um SELECT antes de atualizar.
+	T update2(T entity);
 	
 	// Deleta uma entidade
 	void delete(T entity);

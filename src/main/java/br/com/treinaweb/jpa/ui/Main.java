@@ -9,6 +9,8 @@ import br.com.treinaweb.jpa.services.interfaces.CrudService;
 
 public class Main {
 
+	private static Scanner SCANNER = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		int opcao = 0;
 
@@ -17,7 +19,6 @@ public class Main {
 		listarPessoas();
 
 		while (opcao != 6) {
-			Scanner scanner = new Scanner(System.in);
 			System.out.println("\nEscolha uma ação:");
 			System.out.println("1. Listar pessoas");
 			System.out.println("2. Inserir pessoa");
@@ -26,7 +27,8 @@ public class Main {
 			System.out.println("5. Pesquisar pessoa por nome");
 			System.out.println("6. Sair");
 
-			opcao = scanner.nextInt();
+			opcao = SCANNER.nextInt();
+			SCANNER.nextLine();
 			switch (opcao) {
 			case 1:
 				listarPessoas();
@@ -35,6 +37,7 @@ public class Main {
 				inserirPessoa();
 				break;
 			default:
+				System.out.println("*** Opção inválida ***");
 				break;
 			}
 		}
@@ -43,22 +46,18 @@ public class Main {
 
 	private static void inserirPessoa() {
 		System.out.println("Cadastro de pessoa");
-		Scanner scanner = new Scanner(System.in);
-		
+
 		Pessoa novaPessoa = new Pessoa();
-		System.out.println("Nome: ");
-		novaPessoa.setNome(scanner.nextLine());
-		System.out.println("Sobrenome: ");
-		novaPessoa.setSobrenome(scanner.nextLine());
-		System.out.println("Idade: ");
-		novaPessoa.setIdade(scanner.nextInt());
-		
-		scanner.close();		
+		System.out.print("Nome: ");
+		novaPessoa.setNome(SCANNER.nextLine());
+		System.out.print("Sobrenome: ");
+		novaPessoa.setSobrenome(SCANNER.nextLine());
+		System.out.print("Idade: ");
+		novaPessoa.setIdade(SCANNER.nextInt());
 
 		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
 		pessoaService.insert(novaPessoa);
 		System.out.println("Cadastro realizado com sucesso :)");
-
 	}
 
 	private static void listarPessoas() {

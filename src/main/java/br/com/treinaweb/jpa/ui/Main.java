@@ -26,7 +26,7 @@ public class Main {
 			System.out.println("4. Excluir pessoa");
 			System.out.println("5. Pesquisar pessoa por nome");
 			System.out.println("6. Sair");
-
+			System.out.print("Sua opção: ");
 			opcao = SCANNER.nextInt();
 			SCANNER.nextLine();
 			switch (opcao) {
@@ -54,9 +54,10 @@ public class Main {
 		novaPessoa.setSobrenome(SCANNER.nextLine());
 		System.out.print("Idade: ");
 		novaPessoa.setIdade(SCANNER.nextInt());
-
+		
 		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
-		pessoaService.insert(novaPessoa);
+		Pessoa pessoa = pessoaService.insert(novaPessoa);
+		System.out.println("ID -> " + pessoa.getId());
 		System.out.println("Cadastro realizado com sucesso :)");
 	}
 
@@ -79,5 +80,4 @@ public class Main {
 			System.out.println("Houve um erro ao utilizar a JPA: " + e.getMessage());
 		}
 	}
-
 }

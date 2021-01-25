@@ -31,8 +31,16 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 
 	@Override
 	public Pessoa byId(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = null;
+		
+		try {
+			em = JpaUtils.getEntityManager();
+			return em.find(Pessoa.class, id);
+		} finally {
+			if(em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override
